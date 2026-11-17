@@ -18,10 +18,14 @@ option(SPRIG_SANITIZE "Build with AddressSanitizer and UndefinedBehaviorSanitize
 # compiler directly instead of launching the command line tool.
 add_library(sprig_core
   src/ast_printer.cpp
+  src/bytecode.cpp
+  src/codegen.cpp
+  src/driver.cpp
   src/lexer.cpp
   src/optimizer.cpp
   src/parser.cpp
   src/sema.cpp
+  src/vm.cpp
 )
 target_include_directories(sprig_core PUBLIC src)
 target_compile_options(sprig_core PUBLIC -Wall -Wextra -Wpedantic -Wshadow -Wconversion)
@@ -30,6 +34,9 @@ if(SPRIG_SANITIZE)
   target_compile_options(sprig_core PUBLIC -fsanitize=address,undefined -fno-omit-frame-pointer -fno-sanitize-recover=undefined)
   target_link_options(sprig_core PUBLIC -fsanitize=address,undefined)
 endif()
+
+add_executable(sprig src/main.cpp)
+target_link_libraries(sprig PRIVATE sprig_core)
 
 if(SPRIG_BUILD_TESTS)
   enable_testing()
@@ -51,6 +58,9 @@ if(SPRIG_BUILD_TESTS)
   add_executable(sprig_tests
     tests/lexer_test.cpp
     tests/parser_test.cpp
+    tests/sema_test.cpp
+    tests/optimizer_test.cpp
+    tests/vm_test.cpp
   )
   target_link_libraries(sprig_tests PRIVATE sprig_core GTest::gtest_main)
 
