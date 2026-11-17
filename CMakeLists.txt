@@ -19,6 +19,7 @@ option(SPRIG_SANITIZE "Build with AddressSanitizer and UndefinedBehaviorSanitize
 add_library(sprig_core
   src/ast_printer.cpp
   src/lexer.cpp
+  src/optimizer.cpp
   src/parser.cpp
   src/sema.cpp
 )
