@@ -1,0 +1,48 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build-and-test:
+    name: ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: gcc release
+            cxx: g++
+            build_type: Release
+            sanitize: "OFF"
+          # Debug keeps the VM's internal assertions on, and the sanitizers
+          # catch memory errors and undefined behaviour the tests alone would miss.
+          - name: gcc debug with sanitizers
+            cxx: g++
+            build_type: Debug
+            sanitize: "ON"
+          # A second compiler catches code that only one of them accepts.
+          - name: clang release
+            cxx: clang++
+            build_type: Release
+            sanitize: "OFF"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure
+        env:
+          CXX: ${{ matrix.cxx }}
+        run: cmake -S . -B build -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} -DSPRIG_SANITIZE=${{ matrix.sanitize }}
+
+      - name: Build
+        run: cmake --build build --parallel
+
+      - name: Test
+        run: ctest --test-dir build --output-on-failure
+
+      - name: Benchmark (release builds only)
+        if: matrix.build_type == 'Release'
+        run: python3 bench/bench.py build/sprig --runs 3
