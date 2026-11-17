@@ -1,0 +1,23 @@
+// Written the way people write readable code: named constants, a debug flag,
+// and arithmetic spelled out step by step. This is the case the optimizer is
+// built for, because everything with a name here is known before the program runs.
+fn simulate(steps: int) -> int {
+    let scale = 1000;
+    let rate_numerator = 3;
+    let rate_denominator = 2;
+    let debug = false;
+
+    let total = 0;
+    let i = 0;
+    while i < steps {
+        let seconds_per_day = 60 * 60 * 24;
+        if debug {
+            print(i);
+        }
+        total = total + (i * scale * rate_numerator / rate_denominator) % seconds_per_day;
+        i = i + 1;
+    }
+    return total;
+}
+
+print(simulate(3000000));

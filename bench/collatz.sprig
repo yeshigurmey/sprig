@@ -1,0 +1,28 @@
+// Branch heavy: finds the starting number below a limit with the longest Collatz chain.
+fn collatz_steps(n: int) -> int {
+    let steps = 0;
+    while n != 1 {
+        if n % 2 == 0 {
+            n = n / 2;
+        } else {
+            n = 3 * n + 1;
+        }
+        steps = steps + 1;
+    }
+    return steps;
+}
+
+let limit = 200000;
+let best = 1;
+let best_steps = 0;
+let n = 1;
+while n < limit {
+    let steps = collatz_steps(n);
+    if steps > best_steps {
+        best = n;
+        best_steps = steps;
+    }
+    n = n + 1;
+}
+print(best);
+print(best_steps);
