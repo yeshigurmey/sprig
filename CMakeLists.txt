@@ -20,6 +20,7 @@ add_library(sprig_core
   src/ast_printer.cpp
   src/lexer.cpp
   src/parser.cpp
+  src/sema.cpp
 )
 target_include_directories(sprig_core PUBLIC src)
 target_compile_options(sprig_core PUBLIC -Wall -Wextra -Wpedantic -Wshadow -Wconversion)
