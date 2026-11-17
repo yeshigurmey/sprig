@@ -17,7 +17,9 @@ option(SPRIG_SANITIZE "Build with AddressSanitizer and UndefinedBehaviorSanitize
 # Everything except main.cpp lives in a library, so the tests can link the
 # compiler directly instead of launching the command line tool.
 add_library(sprig_core
+  src/ast_printer.cpp
   src/lexer.cpp
+  src/parser.cpp
 )
 target_include_directories(sprig_core PUBLIC src)
 target_compile_options(sprig_core PUBLIC -Wall -Wextra -Wpedantic -Wshadow -Wconversion)
@@ -46,6 +48,7 @@ if(SPRIG_BUILD_TESTS)
 
   add_executable(sprig_tests
     tests/lexer_test.cpp
+    tests/parser_test.cpp
   )
   target_link_libraries(sprig_tests PRIVATE sprig_core GTest::gtest_main)
 
