@@ -1,0 +1,25 @@
+// Short circuit evaluation: the right side of && and || only runs when needed.
+// `loud` prints before it returns, so the output shows exactly which calls happened.
+fn loud(value: bool, tag: int) -> bool {
+    print(tag);
+    return value;
+}
+
+print(loud(false, 1) && loud(true, 2));   // prints 1, then false. Call 2 is skipped.
+print(loud(true, 3) || loud(false, 4));   // prints 3, then true. Call 4 is skipped.
+print(loud(true, 5) && loud(false, 6));   // prints 5, 6, then false.
+print(!(1 == 2) == true);
+
+// Scoping: an inner block can reuse a name without touching the outer variable.
+let x = 1;
+{
+    let x = 2;
+    print(x);
+}
+print(x);
+
+// Integers are 64-bit and wrap around on overflow.
+let big = 9223372036854775807;
+print(big + 1);
+print(-7 / 2);
+print(-7 % 2);

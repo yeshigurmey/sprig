@@ -1,0 +1,3 @@
+// Used by the command line tests: this program must be rejected.
+let x = 1;
+print(y);

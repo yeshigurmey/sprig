@@ -1,0 +1,28 @@
+// Counts the steps each starting number takes to reach 1 in the Collatz
+// sequence, and reports the starting number below 30 with the longest chain.
+fn collatz_steps(n: int) -> int {
+    let steps = 0;
+    while n != 1 {
+        if n % 2 == 0 {
+            n = n / 2;
+        } else {
+            n = 3 * n + 1;
+        }
+        steps = steps + 1;
+    }
+    return steps;
+}
+
+let best = 1;
+let best_steps = 0;
+let n = 1;
+while n < 30 {
+    let steps = collatz_steps(n);
+    if steps > best_steps {
+        best = n;
+        best_steps = steps;
+    }
+    n = n + 1;
+}
+print(best);
+print(best_steps);

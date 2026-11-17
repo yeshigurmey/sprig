@@ -61,10 +61,28 @@ if(SPRIG_BUILD_TESTS)
     tests/sema_test.cpp
     tests/optimizer_test.cpp
     tests/vm_test.cpp
+    tests/examples_test.cpp
   )
   target_link_libraries(sprig_tests PRIVATE sprig_core GTest::gtest_main)
+  # Lets examples_test.cpp find the example programs no matter where the tests are run from.
+  target_compile_definitions(sprig_tests PRIVATE SPRIG_EXAMPLES_DIR="${CMAKE_CURRENT_SOURCE_DIR}/examples")
 
   include(GoogleTest)
   gtest_discover_tests(sprig_tests)
 
+  # End to end checks of the command line tool itself: what it prints for a
+  # good program, a program with a compile error, and one that fails while running.
+  add_test(NAME cli_runs_program COMMAND sprig ${CMAKE_CURRENT_SOURCE_DIR}/examples/gcd.sprig)
+  set_tests_properties(cli_runs_program PROPERTIES PASS_REGULAR_EXPRESSION "^21\n21\n1\ntrue\n$")
+
+  add_test(NAME cli_reports_compile_error COMMAND sprig ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/type_error.sprig)
+  set_tests_properties(cli_reports_compile_error PROPERTIES
+    PASS_REGULAR_EXPRESSION "type_error.sprig:3:7: error: 'y' is not declared")
+
+  add_test(NAME cli_reports_runtime_error COMMAND sprig ${CMAKE_CURRENT_SOURCE_DIR}/tests/data/runtime_error.sprig)
+  set_tests_properties(cli_reports_runtime_error PROPERTIES
+    PASS_REGULAR_EXPRESSION "runtime_error.sprig:6: runtime error: division by zero")
+
+  add_test(NAME cli_rejects_unknown_option COMMAND sprig --nope)
+  set_tests_properties(cli_rejects_unknown_option PROPERTIES PASS_REGULAR_EXPRESSION "unknown option")
 endif()

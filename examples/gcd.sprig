@@ -1,0 +1,21 @@
+// Euclid's algorithm, written two ways. Both must agree.
+fn gcd_loop(a: int, b: int) -> int {
+    while b != 0 {
+        let r = a % b;
+        a = b;
+        b = r;
+    }
+    return a;
+}
+
+fn gcd_rec(a: int, b: int) -> int {
+    if b == 0 {
+        return a;
+    }
+    return gcd_rec(b, a % b);
+}
+
+print(gcd_loop(1071, 462));
+print(gcd_rec(1071, 462));
+print(gcd_loop(17, 5));
+print(gcd_loop(48, 18) == gcd_rec(48, 18));

@@ -1,0 +1,20 @@
+// A program written the readable way, with named constants and a debug flag.
+// Run it with --dump-ast at -O0 and -O1 to watch the optimizer erase the names,
+// compute the arithmetic, and delete the debug branch entirely.
+fn seconds_in(days: int) -> int {
+    let seconds_per_minute = 60;
+    let minutes_per_hour = 60;
+    let hours_per_day = 24;
+    return days * seconds_per_minute * minutes_per_hour * hours_per_day;
+}
+
+let debug = false;
+let week = 7;
+
+if debug {
+    print(123456789);
+}
+
+print(seconds_in(1));
+print(seconds_in(week));
+print(week * 2 + 1 > 10 && !debug);

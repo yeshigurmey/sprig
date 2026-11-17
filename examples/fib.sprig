@@ -1,0 +1,13 @@
+// Recursive Fibonacci: the classic stress test for function calls.
+fn fib(n: int) -> int {
+    if n < 2 {
+        return n;
+    }
+    return fib(n - 1) + fib(n - 2);
+}
+
+let i = 0;
+while i <= 15 {
+    print(fib(i));
+    i = i + 1;
+}
